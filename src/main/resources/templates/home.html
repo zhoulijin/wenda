@@ -1,0 +1,23 @@
+<html>
+<body>
+<pre>
+
+    $!{key}
+
+    colors:$!{colors}
+
+    #foreach($color in $colors)
+        This is $color
+    #end
+
+    #foreach($key in $map.keySet())
+        Key: $key Value $map.get($key)
+    #end
+
+    User: $!{user.name}
+    User: $!{user.getDescription()}
+    User: $!{user.description}
+
+</pre>
+</body>
+</html>
