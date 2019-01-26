@@ -1,10 +1,7 @@
 package com.freestyle.wenda.controller;
 
-import com.freestyle.wenda.model.User;
-import com.freestyle.wenda.service.UserService;
 import com.freestyle.wenda.service.WendaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,22 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+//@Controller
 public class IndexController {
 
     @Autowired
     WendaService wendaService;
 
-    @Autowired
-    UserService userService;
-
     @RequestMapping(path = {"/", "/index", "test"}, method = {RequestMethod.GET})
     @ResponseBody
     public String index(HttpSession httpSession) {
-        User user = new User();
-        user.setName("fasdf");
-        user.setPassword("fdas");
-        userService.add(user);
         return wendaService.getMessage(1) + "hello nowcoder!" + " " + httpSession.getAttribute("message");
     }
 
