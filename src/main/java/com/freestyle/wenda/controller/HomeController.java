@@ -38,6 +38,7 @@ public class HomeController {
         return "index";
     }
 
+
     public List<ViewObject> getQuestions(int userId, int offset, int limit) {
         List<Question> questionList = questionService.getLeastQuestions(userId, offset, limit);
         List<ViewObject> viewObjects = new ArrayList<>();
