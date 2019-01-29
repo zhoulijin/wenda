@@ -1,5 +1,7 @@
 package com.freestyle.wenda.util;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +13,19 @@ import java.util.Map;
  */
 public class WendaUtil {
     private static final Logger logger = LoggerFactory.getLogger(WendaUtil.class);
+
+    public static String getJsonString(int code) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", code);
+        return jsonObject.toJSONString();
+    }
+
+    public static String getJsonString(int code, String msg) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", code);
+        jsonObject.put("msg", msg);
+        return jsonObject.toJSONString();
+    }
 
     public static String MD5(String key) {
         char hexDigits[] = {

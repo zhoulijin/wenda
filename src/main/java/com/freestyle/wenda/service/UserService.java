@@ -19,7 +19,7 @@ public class UserService {
     @Autowired
     UserDAO userDAO;
 
-    public User getUSer(int id) {
+    public User selectById(int id) {
         return userDAO.selectUserById(id);
     }
 
@@ -47,7 +47,6 @@ public class UserService {
         user.setPassword(WendaUtil.MD5(password + user.getSalt()));
         user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(100)));
         userDAO.addUser(user);
-
 
         String ticket = addLoginTicket(user.getId());
         map.put("ticket", ticket);
@@ -97,6 +96,7 @@ public class UserService {
         date.setTime(date.getTime() + 3600 * 1000 * 24);
         loginTicket.setExpired(date);
         loginTicket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));
+//        loginTicket.setTicket("11");
         loginTicket.setStatus(0);
         loginTicketDAO.addLoginTicket(loginTicket);
         return loginTicket.getTicket();
