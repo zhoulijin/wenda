@@ -1,10 +1,8 @@
 package com.freestyle.wenda.controller;
 
-import com.freestyle.wenda.model.Comment;
-import com.freestyle.wenda.model.EntityType;
-import com.freestyle.wenda.model.Question;
-import com.freestyle.wenda.model.ViewObject;
+import com.freestyle.wenda.model.*;
 import com.freestyle.wenda.service.CommentService;
+import com.freestyle.wenda.service.LikeService;
 import com.freestyle.wenda.service.QuestionService;
 import com.freestyle.wenda.service.UserService;
 import com.freestyle.wenda.util.WendaUtil;
@@ -29,6 +27,11 @@ public class QuestionController {
     @Autowired
     CommentService commentService;
 
+    @Autowired
+    LikeService likeService;
+
+    @Autowired
+    HostHolder hostHolder;
 
     @RequestMapping(path = {"question/add"}, method = {RequestMethod.POST})
     @ResponseBody
@@ -65,6 +68,16 @@ public class QuestionController {
             ViewObject viewObject = new ViewObject();
             viewObject.set("comment", comment);
             viewObject.set("user", userService.selectById(comment.getUserId()));
+
+
+            if (hostHolder.getUser() == null) {
+                viewObject.set("liked", 0);
+            } else {
+                viewObject.set("liked", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT, comment.getId()));
+            }
+
+            viewObject.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT, comment.getId()));
+
             vos.add(viewObject);
         }
         model.addAttribute("comments", vos);
