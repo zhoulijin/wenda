@@ -1,9 +1,13 @@
 package com.freestyle.wenda.util;
 
+import com.alibaba.fastjson.JSONObject;
+import com.freestyle.wenda.model.User;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+
+import java.util.List;
 
 @Service
 public class JedisAdapter implements InitializingBean {
@@ -74,6 +78,19 @@ public class JedisAdapter implements InitializingBean {
         print(16, jedis.sismember(likeKey1, "11"));
 
         print(17, jedis.scard(likeKey1));
+
+        User newUser = new User();
+        newUser.setName("name");
+        newUser.setPassword("ppp");
+        newUser.setHeadUrl("fdsaf");
+        newUser.setSalt("salt");
+
+        jedis.set("newUser", JSONObject.toJSONString(newUser));
+        String string = jedis.get("newUser");
+
+        print(18, string);
+        User user2 = JSONObject.parseObject(string, User.class);
+        print(19, user2.getPassword() + " " + user2.getName());
     }
 
     JedisPool pool;
@@ -142,5 +159,35 @@ public class JedisAdapter implements InitializingBean {
             }
         }
         return false;
+    }
+
+    public long lpush(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.lpush(key, value);
+        } catch(Exception e) {
+
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return 0;
+    }
+
+    public List<String> brpop(int timeout, String key) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.brpop(timeout, key);
+        } catch(Exception e) {
+
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
     }
 }
