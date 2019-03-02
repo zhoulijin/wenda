@@ -45,11 +45,10 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
             }
         }
 
-        Thread thread = new Thread() {
+
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                super.run();
-
                 String key = RedisKeyUtil.getBizEventqueue();
                 while (true) {
                     List<String> events = jedisAdapter.brpop(0, key);
@@ -69,7 +68,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
                     }
                 }
             }
-        };
+        });
 
         thread.start();
     }
