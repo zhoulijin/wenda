@@ -46,31 +46,31 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
         }
 
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String key = RedisKeyUtil.getBizEventqueue();
-                while (true) {
-                    List<String> events = jedisAdapter.brpop(0, key);
-                    for (String message : events) {
-                        if (message.equals(key)) {
-                            continue;
-                        }
-
-                        EventModel eventModel = JSONObject.parseObject(message, EventModel.class);
-                        if (!config.containsKey(eventModel.getType())) {
-                            continue;
-                        }
-
-                        for (EventHandler handler : config.get(eventModel.getType())) {
-                            handler.doHandle(eventModel);
-                        }
-                    }
-                }
-            }
-        });
-
-        thread.start();
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String key = RedisKeyUtil.getBizEventqueue();
+//                while (true) {
+//                    List<String> events = jedisAdapter.brpop(0, key);
+//                    for (String message : events) {
+//                        if (message.equals(key)) {
+//                            continue;
+//                        }
+//
+//                        EventModel eventModel = JSONObject.parseObject(message, EventModel.class);
+//                        if (!config.containsKey(eventModel.getType())) {
+//                            continue;
+//                        }
+//
+//                        for (EventHandler handler : config.get(eventModel.getType())) {
+//                            handler.doHandle(eventModel);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//
+//        thread.start();
     }
 
     @Override
